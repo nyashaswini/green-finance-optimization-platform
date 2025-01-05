@@ -1,0 +1,146 @@
+/* Main Dashboard Container */
+.dashboard-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f7fa;
+}
+
+.dashboard-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+/* Content Layout */
+.content-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    flex: 0 0 300px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sidebar h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.sidebar .button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.sidebar .button:hover {
+    background-color: #2980b9;
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Metric Cards */
+.metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.metric-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Chart Cards */
+.charts-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.chart-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Scenario Analysis Section */
+.scenario-row {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Project Cards */
+.project-card {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.project-card h4 {
+    color: #2c3e50;
+    margin: 0 0 10px 0;
+}
+
+.project-card p {
+    margin: 5px 0;
+    color: #7f8c8d;
+}
+
+/* Slider Styles */
+.rc-slider-track {
+    background-color: #3498db;
+}
+
+.rc-slider-handle {
+    border-color: #3498db;
+}
+
+/* Graph Styles */
+.js-plotly-plot {
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .content-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        flex: none;
+        width: auto;
+    }
+    
+    .metrics-row,
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+}
