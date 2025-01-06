@@ -1,0 +1,41 @@
+{
+  "-6994334737562908582": {
+    "id": "-6994334737562908582",
+    "name": " Mumbai Vertical Farms Initiative",
+    "description": " Innovative vertical farming project in Mumbai converting unused urban spaces into sustainable farms. Features include solar-powered LED lighting, automated hydroponics, and IoT monitoring. Will create 50 local jobs and provide fresh produce while using 95% less water than traditional farming.",
+    "funding_required": 2500000.0,
+    "timeline": 18,
+    "sustainability_impact": "Project reduces water usage by 95%, eliminates pesticides, and cuts carbon emissions by 70%. Creates 50 green jobs and improves urban food security. Uses 100% renewable energy and implements zero-waste practices through organic waste recycling.",
+    "funding_progress": 0,
+    "timeline_progress": 0,
+    "status": "Pending Review",
+    "updates": [],
+    "feedback": [],
+    "creation_date": "2025-01-06T05:21:20.510904"
+  },
+  "2": {
+    "id": "2",
+    "name": "Solar Plants",
+    "description": "hujjn",
+    "funding_required": 589.0,
+    "timeline": 5,
+    "sustainability_impact": "hlgbkhnl",
+    "status": "pending",
+    "date_submitted": "2025-01-06T06:34:42.024559",
+    "funding_progress": 0,
+    "timeline_progress": 0,
+    "updates": [],
+    "feedback": [],
+    "environmental_score": 0,
+    "social_score": 0,
+    "governance_score": 0,
+    "impact_metrics": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "fund_seeker_id": "ejgljdflghertkjegyr",
+    "location": "Not specified"
+  }
+}

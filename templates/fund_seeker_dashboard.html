@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fund Seeker Dashboard - Green Finance Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .project-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .progress {
+            height: 20px;
+            margin: 10px 0;
+        }
+        .feedback-item {
+            border-left: 3px solid #3498db;
+            padding: 10px;
+            margin: 10px 0;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Green Finance Platform</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col">
+                <h2>Fund Seeker Dashboard</h2>
+            </div>
+            <div class="col-auto">
+                <div class="btn-group" role="group">
+                    <button onclick="showSection('submit')" class="btn btn-primary">Submit Project</button>
+                    <button onclick="showSection('track')" class="btn btn-primary">Track Progress</button>
+                    <button onclick="showSection('updates')" class="btn btn-primary">Project Updates</button>
+                    <button onclick="showSection('feedback')" class="btn btn-primary">Feedback</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Submission Section -->
+        <div id="submit-section" class="section">
+            <h3 class="mb-4">Submit New Project</h3>
+            <form action="/fund-seeker/submit-project" method="POST">
+                <div class="mb-3">
+                    <label for="project-name" class="form-label">Project Name</label>
+                    <input type="text" class="form-control" id="project-name" name="project_name" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="project-description" class="form-label">Project Description</label>
+                    <textarea class="form-control" id="project-description" name="project_description" rows="4" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="funding-required" class="form-label">Funding Required (USD)</label>
+                    <input type="number" class="form-control" id="funding-required" name="funding_required" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="project-timeline" class="form-label">Expected Timeline (months)</label>
+                    <input type="number" class="form-control" id="project-timeline" name="project_timeline" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="sustainability-impact" class="form-label">Sustainability Impact</label>
+                    <textarea class="form-control" id="sustainability-impact" name="sustainability_impact" rows="3" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-success">Submit Project</button>
+            </form>
+        </div>
+
+        <!-- Progress Tracking Section -->
+        <div id="track-section" class="section" style="display: none;">
+            <h3 class="mb-4">Project Progress</h3>
+            {% if projects %}
+                <div class="row">
+                    {% for project in projects %}
+                    <div class="col-md-6 mb-4">
+                        <div class="project-card">
+                            <h4>{{ project.name }}</h4>
+                            <p><strong>Status:</strong> <span class="badge bg-{{ 'success' if project.status == 'approved' else 'warning' }}">{{ project.status }}</span></p>
+                            <p><strong>Description:</strong> {{ project.description }}</p>
+                            <p><strong>Funding Required:</strong> ${{ "{:,.2f}".format(project.funding_required) }}</p>
+                            <p><strong>Timeline:</strong> {{ project.timeline }} months</p>
+                            <p class="mb-2">Funding Progress:</p>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     style="width: {{ (project.funding_progress / project.funding_required * 100) if project.funding_required > 0 else 0 }}%" 
+                                     aria-valuenow="{{ project.funding_progress }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="{{ project.funding_required }}">
+                                    {{ "{:.1f}%".format(project.funding_progress / project.funding_required * 100) if project.funding_required > 0 else "0%" }}
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-2">Timeline Progress:</p>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar" 
+                                     style="width: {{ (project.timeline_progress / project.timeline * 100) if project.timeline > 0 else 0 }}%" 
+                                     aria-valuenow="{{ project.timeline_progress }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="{{ project.timeline }}">
+                                    {{ "{:.1f}%".format(project.timeline_progress / project.timeline * 100) if project.timeline > 0 else "0%" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    No projects found. Submit a new project to get started!
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Project Updates Section -->
+        <div id="updates-section" class="section" style="display: none;">
+            <h3 class="mb-4">Project Updates</h3>
+            {% if projects %}
+                {% for project in projects %}
+                <div class="project-card">
+                    <h4>{{ project.name }}</h4>
+                    <form action="/fund-seeker/add-update" method="POST" class="mb-3">
+                        <input type="hidden" name="project_id" value="{{ project.id }}">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="update_text" placeholder="Add an update..." required>
+                            <button type="submit" class="btn btn-primary">Add Update</button>
+                        </div>
+                    </form>
+                    {% if project.updates %}
+                        <div class="updates-list">
+                            {% for update in project.updates %}
+                            <div class="alert alert-info">
+                                <small class="text-muted">{{ update.date }}</small>
+                                <p class="mb-0">{{ update.text }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No updates yet.</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    No projects found. Submit a new project to add updates!
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Feedback Section -->
+        <div id="feedback-section" class="section" style="display: none;">
+            <h3 class="mb-4">Investor Feedback</h3>
+            {% for project in projects %}
+            <div class="project-card">
+                <h4>{{ project.name }}</h4>
+                <div class="feedback-list">
+                    {% for feedback in project.feedback %}
+                    <div class="feedback-item">
+                        <p class="mb-1">{{ feedback.text }}</p>
+                        <small class="text-muted">From: {{ feedback.investor_name }} on {{ feedback.date }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        const socket = io();
+        
+        // Connect to WebSocket and join fund seeker room
+        socket.on('connect', () => {
+            socket.emit('join', {
+                user_id: '{{ current_user.id }}',
+                role: 'fund-seeker'
+            });
+        });
+
+        // Listen for project updates
+        socket.on('project_update', (data) => {
+            const projectCard = document.querySelector(`[data-project-id="${data.project_id}"]`);
+            if (projectCard) {
+                if (data.type === 'status') {
+                    updateProjectStatus(data.project_id, data.status);
+                } else if (data.type === 'funding') {
+                    updateFundingProgress(data.project_id, data.amount);
+                }
+            }
+        });
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(`${sectionName}-section`).style.display = 'block';
+        }
+
+        // Show submit section by default
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('submit');
+        });
+
+        // Show flash messages
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    alert('{{ message }}');
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </script>
+</body>
+</html>

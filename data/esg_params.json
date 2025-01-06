@@ -1,0 +1,5 @@
+{
+  "env_weight": 0.4,
+  "social_weight": 0.3,
+  "gov_weight": 0.3
+}
