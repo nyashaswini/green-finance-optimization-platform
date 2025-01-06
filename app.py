@@ -646,4 +646,19 @@ def optimize_portfolio():
     return jsonify(optimization_results)
 
 if __name__ == '__main__':
-    socketio.run(server, debug=True, port=5001)
+    try:
+        # Try different ports if the default one is in use
+        ports = [5001, 5002, 5003, 5004, 5005]
+        for port in ports:
+            try:
+                print(f"Attempting to start server on port {port}...")
+                socketio.run(server, debug=True, host='127.0.0.1', port=port)
+                break
+            except OSError as e:
+                if port == ports[-1]:
+                    print(f"Error: Could not find an available port. Please ensure no other applications are using ports {ports}")
+                    raise e
+                print(f"Port {port} is in use, trying next port...")
+                continue
+    except Exception as e:
+        print(f"Error starting server: {str(e)}")
